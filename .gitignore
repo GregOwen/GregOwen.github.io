@@ -1,2 +1,5 @@
 # Ignore the Gemfile lock
 Gemfile.lock
+
+# Don't commit the rendered html to github
+_site
