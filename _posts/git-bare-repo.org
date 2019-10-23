@@ -1,0 +1,28 @@
+* A "normal" git repo contains two pieces of state
+** Snapshot of all files ("working tree")
+*** These are the files that you typically work with
+** History of all changes (.git)
+*** This is sufficient to reconstruct the snapshot at any point in time (e.g. not just metadata)
+*** DONE make sure this is actually correct
+    CLOSED: [2019-10-23 Wed 10:54]
+*** Can see this by taking a look at `git help repository-layout`, `tree .git`
+* Key idea is that you don't need the snapshot in order to store the whole history of the project
+** But snapshot is very convenient for editing, compiling, running
+*** Basically, don't have to speak git to make changes/compile/run
+** This is why you hear "bare repos should be used for central sources of truth" - GitHub doesn't need to do anything but store the history
+*** Plus having a snapshot doesn't really make sense unless there's a single-threaded person accessing it
+* More generally, don't need snapshot to live in the same directory as the history
+** It's often convenient to have them together, but not necessary
+** This is how you can use bare repos to track dotfiles
+*** Key insight is that the working tree already exists (in your $HOME), so no need to duplicate it in your repo
+*** You don't want to store the history in ~/.git because of the way git handles repos in subdirectories of another repo
+**** DONE get a better explanation for this
+     CLOSED: [2019-10-23 Wed 11:11]
+***** Just going to handwave
+*** DONE basic explanation of how to set up dotfiles via GitHub
+    CLOSED: [2019-10-23 Wed 14:42]
+**** DONE if I already have a machine with my dotfiles, how do I create a repo and get it to GitHub?
+     CLOSED: [2019-10-23 Wed 14:42]
+**** DONE if I get a new machine that has a non-empty home file, how do I move my dotfiles onto it from GitHub?
+     CLOSED: [2019-10-23 Wed 14:42]
+**** Just follow commands at https://github.com/Siilwyn/my-dotfiles/tree/master/.my-dotfiles
