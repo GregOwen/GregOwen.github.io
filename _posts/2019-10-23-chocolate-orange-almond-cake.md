@@ -23,12 +23,12 @@ A few months later, I finally had time to thaw some of the slices and devlop a c
 
 According to the Prolific Oven's [website](http://www.prolificoven.com/bakery/cakes/chocolate-orange-almond), the Chocolate Orange Almond Cake consists of four components:
 
-1. A layer of orange almond cake
-1. A layer of chocolate cake
-1. A thin layer of orange cream cheese frosting between the layers of cake
-1. A thick layer of rich chocolate frosting on top of the cake
+1. A layer of [orange almond cake](#the-orange-almond-cake)
+1. A layer of [chocolate cake](#the-chocolate-cake)
+1. A thin layer of [orange cream cheese frosting](#the-orange-cream-cheese-frosting) between the layers of cake
+1. A thick layer of [rich chocolate frosting](#the-rich-chocolate-frosting) on the top and sides of the cake
 
-Below, you'll find the recipes for each layer, followed by a section on assembly. I've also included an aggregated shopping list if you want to know what the total set of ingredients is.
+Below, you'll find the recipes for each layer, followed by a section on [assembly](#assembly). I've also included an [aggregated shopping list](#aggregated-ingredient-list) if you want to know what the total set of ingredients is.
 
 # The orange almond cake
 
