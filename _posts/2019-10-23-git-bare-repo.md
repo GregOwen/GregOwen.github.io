@@ -1,6 +1,7 @@
 ---
 title: "What are bare Git repos and what are they used for?"
 date: 2019-10-23T14:46:00-07:00
+classes: wide
 categories:
   - blog
 tags:
