@@ -17,7 +17,7 @@ My particular favorite from the Prolific Oven was their [Chocolate Orange Almond
 
 So right before the Prolific Oven closed, I bought one of the last Chocolate Orange Almond Cakes. I took the cake home, sliced it into pieces, and then, like a science fiction author desperately trying to write himself out of a corner by throwing in a last-ditch attempt at cryopreservation, I froze the pieces so that I might one day attempt to revive it through as-yet-unknown methods.
 
-A few months later, I finally had time to thaw some of the slices and devlop a clone. And I'm happy to report that it worked! It's not perfect, but it's really close - close enough to taste, emotionally, like the original. Here it is, along with some research notes.
+A few months later, I finally had time to thaw some of the slices and devlop a clone. And I'm happy to report that it worked! It's not perfect, but it's really close - close enough to taste, emotionally, like the original. Here it is, along with some research notes[^amazon-affiliate-notice].
 
 # Overview
 
@@ -32,7 +32,7 @@ Below, you'll find the recipes for each layer, followed by a section on [assembl
 
 # The orange almond cake
 
-This was the hardest part to get right, and the most important for the emotional impact of The Cake. After a false start with a [Middle Eastern orange almond cake](https://www.finecooking.com/recipe/orange-almond-cake) that was delicious but had completely the wrong texture and flavor, I decided to start with a plain almond cake and add orange flavoring. I adapted the Golden Almond Cake from Rose Levy Beranbaum's classic [The Cake Bible](https://www.amazon.com/gp/product/0688044026/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0688044026&linkCode=as2&tag=gregowen-20&linkId=4fa73a14326b072846f2905a38cd3645)[^amazon-affiliate-notice], and it worked perfectly.
+This was the hardest part to get right, and the most important for the emotional impact of The Cake. After a false start with a [Middle Eastern orange almond cake](https://www.finecooking.com/recipe/orange-almond-cake) that was delicious but had completely the wrong texture and flavor, I decided to start with a plain almond cake and add orange flavoring. I adapted the Golden Almond Cake from Rose Levy Beranbaum's classic [The Cake Bible](https://www.amazon.com/gp/product/0688044026/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0688044026&linkCode=as2&tag=gregowen-20&linkId=4fa73a14326b072846f2905a38cd3645), and it worked perfectly.
 
 <div class='recipe'>
 <div class='ingredients' markdown='1'>
@@ -73,7 +73,7 @@ This was the hardest part to get right, and the most important for the emotional
 
 This part was pretty easy. The [Prolific Oven website](http://www.prolificoven.com/bakery/cakes/chocolate-on-chocolate) describes their cake as "rich American-Style sour cream chocolate cake", so I had a good idea of what to look for. The chocolate cake layer does not contribute a lot of flavor to The Cake, so if you have a go-to chocolate cake recipe that includes sour cream, I'd suggest you just use that.
 
-As with all chocolate baked goods, my go-to recipe comes from Lori Longbotham's fantastic [Luscious Chocolate Desserts](https://www.amazon.com/gp/product/0811835162/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0811835162&linkCode=as2&tag=gregowen-20&linkId=aa13500b7259b2cee693cdfb0c3ebf1f)[^amazon-affiliate-notice]. I've just halved the cake section of the Luscious Chocolate Layer Cake recipe since that recipe makes two layers and we only need one.
+As with all chocolate baked goods, my go-to recipe comes from Lori Longbotham's fantastic [Luscious Chocolate Desserts](https://www.amazon.com/gp/product/0811835162/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0811835162&linkCode=as2&tag=gregowen-20&linkId=aa13500b7259b2cee693cdfb0c3ebf1f). I've just halved the cake section of the Luscious Chocolate Layer Cake recipe since that recipe makes two layers and we only need one.
 
 <div class='recipe'>
 <div class='ingredients' markdown='1'>
@@ -110,11 +110,11 @@ As with all chocolate baked goods, my go-to recipe comes from Lori Longbotham's 
 
 # The orange cream cheese frosting
 
-This turned out to be surprisingly tricky. Most of the cream cheese frosting recipes I found are super flavorful because they're meant to go on carrot cake, which generally tastes like damp cardboard. For example, the [Cook's Illustrated](https://www.amazon.com/gp/product/1933615893/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1933615893&linkCode=as2&tag=gregowen-20&linkId=4157096c3e95ecb56164501241209d39)[^amazon-affiliate-notice] recipe adds vanilla and sour cream to amp up the tanginess and help you forget that you're eating carrot cake.
+This turned out to be surprisingly tricky. Most of the cream cheese frosting recipes I found are super flavorful because they're meant to go on carrot cake, which generally tastes like damp cardboard. For example, the [Cook's Illustrated](https://www.amazon.com/gp/product/1933615893/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1933615893&linkCode=as2&tag=gregowen-20&linkId=4157096c3e95ecb56164501241209d39) recipe adds vanilla and sour cream to amp up the tanginess and help you forget that you're eating carrot cake.
 
 The problem is that the cream cheese frosting in the Chocolate Orange Almond Cake is *not* supposed to contribute a lot of tanginess. It's mostly there to provide some moisture on top of the orange almond cake layer, which is quite dry. The frosting also helps amp up the orange flavor (which is not particularly strong in the cake), but its flavor contribution needs to blend with the orange almond cake rather than sticking out. It's another part in the Chocolate Orange Almond Cake barbershop quarter, not a soloist.
 
-I ended up not going with the Cook's Illustrated recipe. Instead, I adapted the recipe from the [Flour cookbook](https://www.amazon.com/gp/product/081186944X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=081186944X&linkCode=as2&tag=gregowen-20&linkId=e6afd28bf5942a765d69409570715e20)[^amazon-affiliate-notice][^flour]: I increased the ratio of confectioner's sugar to cream cheese to get a thicker, less tangy frosting and added orange zest to get the orange flavor.
+I ended up not going with the Cook's Illustrated recipe. Instead, I adapted the recipe from the [Flour cookbook](https://www.amazon.com/gp/product/081186944X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=081186944X&linkCode=as2&tag=gregowen-20&linkId=e6afd28bf5942a765d69409570715e20)[^flour]: I increased the ratio of confectioner's sugar to cream cheese to get a thicker, less tangy frosting and added orange zest to get the orange flavor.
 
 <div class='recipe'>
 <div class='ingredients' markdown='1'>
@@ -140,7 +140,7 @@ I ended up not going with the Cook's Illustrated recipe. Instead, I adapted the 
 
 This was also really tricky to get right. The chocolate frosting is one of the hallmarks of Prolific Oven cakes, and its thick, buttery chocolate flavor was critical to faithfully recreating the flavor of The Cake.
 
-I tried a straight-up chocolate ganache from the [Flour cookbook](https://www.amazon.com/gp/product/081186944X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=081186944X&linkCode=as2&tag=gregowen-20&linkId=e6afd28bf5942a765d69409570715e20)[^amazon-affiliate-notice], but it was too bitter and not buttery enough. I tried the whipped chocolate ganache frosting from [Luscious Chocolate Desserts](https://www.amazon.com/gp/product/0811835162/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0811835162&linkCode=as2&tag=gregowen-20&linkId=aa13500b7259b2cee693cdfb0c3ebf1f)[^amazon-affiliate-notice], which had the buttery taste but the wrong texture and color. I ended up adapting the Luscious Chocolate Desserts recipe (part of the Divine Devil's Food Cake), omitting the whipping, and that captured the taste, color, and feel of the original.
+I tried a straight-up chocolate ganache from the [Flour cookbook](https://www.amazon.com/gp/product/081186944X/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=081186944X&linkCode=as2&tag=gregowen-20&linkId=e6afd28bf5942a765d69409570715e20), but it was too bitter and not buttery enough. I tried the whipped chocolate ganache frosting from [Luscious Chocolate Desserts](https://www.amazon.com/gp/product/0811835162/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0811835162&linkCode=as2&tag=gregowen-20&linkId=aa13500b7259b2cee693cdfb0c3ebf1f), which had the buttery taste but the wrong texture and color. I ended up adapting the Luscious Chocolate Desserts recipe (part of the Divine Devil's Food Cake), omitting the whipping, and that captured the taste, color, and feel of the original.
 
 Two important notes for this recipe:
 1. You **must** use semisweet chocolate (~50-55% cacao) rather than bittersweet chocolate (> 65% cacao) for this frosting. I normally prefer a more bitter chocolate flavor and tend to use darker chocolate in everything, but for this application it just doesn't work. The bitterness of the chocolate totally clobbers the subtle orange-almond flavors from the cake and the cream cheese frosting and it doesn't taste anything like the Prolific Oven recipe.
@@ -207,6 +207,6 @@ Two important notes for this recipe:
 
 I hope this cake brings you as much joy as it has brought me. If you've managed to recreate any of the other Prolific Oven recipes (especially their Chocolate Mocha Cake or their Rum Cake), please let me know.
 
-[^amazon-affiliate-notice]: This an Amazon Affiliate link. If you click through this link and end up buying the book, Amazon will send me some money.
+[^amazon-affiliate-notice]:  I've included Amazon Affiliate links to the source materials I used. If you click through those links and end up buying any of the cookbooks I mention, Amazon will send me some money.
 
 [^flour]: If you've never been to Flour, I highly recommend it. I always make sure I have time to swing by whenever I'm in the Boston area.
