@@ -11,13 +11,13 @@ tags:
   - Prolific Oven
 ---
 
-On August 31, 2019 the Bay Area lost one of our greatest treasures: the Prolific Oven [closed down](http://www.prolificoven.com/). Growing up, the Prolific Oven had always been my family's go-to place for birthday cakes, graduation cakes, and generally cakes for any sort of celebration. The loss, especially coming so soon on the heels of Applewood's closure, was a cause for mourning.
+August 31, 2019 was a dark day in the Bay Area: after almost 40 years in business, the Prolific Oven [closed down](http://www.prolificoven.com/). Growing up, the Prolific Oven had always been my family's go-to place for birthday cakes, graduation cakes, and generally cakes for any sort of celebration. It's loss leaves the Peninsula a sadder, less delicious, more generic place.
 
-My particular favorite from the Prolific Oven was their [Chocolate Orange Almond Cake](http://www.prolificoven.com/bakery/cakes/chocolate-orange-almond). To me, this was The Cake. Even without its coating of sliced almonds (discontinued as the default in 2016), the delicate orange-almond flavor balanced with the thick fudgy chocolate frosting was what celebration tasted like. And suddenly, it was gone from this earth.
+My particular favorite from the Prolific Oven was their [Chocolate Orange Almond Cake](http://www.prolificoven.com/bakery/cakes/chocolate-orange-almond). To me, this was The Cake. Even without its coating of sliced almonds (available only by special request since 2016), the delicate orange-almond flavor balanced with the thick fudgy chocolate frosting was what celebration tasted like. I couldn't just let this cake go.
 
-Fortunately, I managed to buy one of the last Chocolate Orange Almond Cakes ever made right before the Prolific Oven closed. I took the cake home, sliced it into pieces, and then, like a science fiction character preparing their fallen comrade for a last-ditch attempt at cryopreservation, I froze the pieces so that I might one day attempt to revive it through as-yet-unknown methods.
+So right before the Prolific Oven closed, I bought one of the last Chocolate Orange Almond Cakes. I took the cake home, sliced it into pieces, and then, like a science fiction author desperately trying to write himself out of a corner by throwing in a last-ditch attempt at cryopreservation, I froze the pieces so that I might one day attempt to revive it through as-yet-unknown methods.
 
-A few months later, I finally had time to thaw some of the slices and devlop a clone. And I'm happy to report that it worked: it took a lot of research and a few false starts, but I have developed a recipe that tastes like the original. It's not perfect, but it's really close - close enough to evoke the same emotions of celebration as the genuine article. Here it is.
+A few months later, I finally had time to thaw some of the slices and devlop a clone. And I'm happy to report that it worked! It's not perfect, but it's really close - close enough to taste, emotionally, like the original. Here it is, along with some research notes.
 
 # Overview
 
