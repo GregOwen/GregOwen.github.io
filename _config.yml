@@ -11,7 +11,8 @@
 # Site settings
 title: Stegosaurus Dormant
 name: Greg Owen # Sets the copyright name in the footer
-logo: /assets/images/logo.svg # Sets the logo in the header
+# logo: /assets/images/logo.svg # Sets the logo in the header
+svg_logo: /assets/images/logo.svg # Sets the logo in the About page
 email:
 description: >- # this means to ignore newlines until "baseurl:"
   Greg Owen's blog on programming, software engineering, and sundry miscellany
