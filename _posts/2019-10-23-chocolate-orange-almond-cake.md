@@ -32,7 +32,7 @@ Below, you'll find the recipes for each layer, followed by a section on [assembl
 
 # The orange almond cake
 
-This was the hardest part to get right, and the most important for the emotional impact of The Cake. After a false start with a [Middle Eastern orange almond cake](https://www.finecooking.com/recipe/orange-almond-cake) that was delicious but had completely the wrong texture and flavor, I decided to start with a plain almond cake and add orange flavoring. I adapted the Golden Almond Cake from Rose Levy Beranbaum's classic [The Cake Bible](https://www.amazon.com/gp/product/0688044026/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0688044026&linkCode=as2&tag=gregowen-20&linkId=4fa73a14326b072846f2905a38cd3645), and it worked perfectly.
+This was the hardest part to get right, and the most important for the emotional impact of The Cake. After a false start with a [Middle Eastern orange almond cake](https://www.finecooking.com/recipe/orange-almond-cake) that was delicious but had entirely the wrong texture and flavor, I decided to start with a plain almond cake and add orange flavoring. I adapted the Golden Almond Cake from Rose Levy Beranbaum's classic [The Cake Bible](https://www.amazon.com/gp/product/0688044026/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0688044026&linkCode=as2&tag=gregowen-20&linkId=4fa73a14326b072846f2905a38cd3645), and it worked perfectly.
 
 <div class='recipe'>
 <div class='ingredients' markdown='1'>
@@ -132,7 +132,7 @@ I ended up not going with the Cook's Illustrated recipe. Instead, I adapted the 
 1. Using a stand mixer, beat the cream cheese until it's smooth. This won't work if the cream cheese is too cold - make sure it and the butter are at room temperature before you start making the frosting.
 1. Add the butter and orange zest and beat until smooth and homogenous. Scrap down the sides of the bowl and beat for a little extra to make sure everything is uniform.
 1. Add the confectioner's sugar and beat well until no lumps remain.
-1. Transfer to a mason jar or plastic container and put in the refrigerator.
+1. Transfer to a sealable container and put in the refrigerator.
 </div>
 </div>
 
@@ -158,7 +158,7 @@ Two important notes for this recipe:
 <div class='instructions' markdown='1'>
 ## Instructions
 
-1. Slowly heat the cream in a thick-bottomed saucepan over medium heat until bubbles just barely start to form at the edges, whisking occasionally to prevent a skin from forming.
+1. Heat the cream in a thick-bottomed saucepan over medium heat until bubbles just barely start to form at the edges, whisking occasionally to prevent a skin from forming.
 1. While the cream is heating, chop the chocolate into very fine pieces and cut the butter into small chunks.
 1. Remove the saucepan from the heat and add the chocolate, whisking until smooth (you want to make sure the chocolate has fully melted from the residual heat of the cream).
 1. Add the butter and whisk until smooth.
@@ -198,6 +198,7 @@ Two important notes for this recipe:
 - 1/2 tsp orange extract
 - 5/8 tsp salt
 - 7 1/2 oz semisweet chocolate
+- sliced almonds (optional) // TODO(greg): estimate quantity
 - 1 1/3 cup sour cream
 - 1 7/8 cup sugar
 - 25 tbsp unsalted butter (this is just over 3 sticks)
@@ -209,4 +210,4 @@ I hope this cake brings you as much joy as it has brought me. If you've managed 
 
 [^amazon-affiliate-notice]:  I've included Amazon Affiliate links to the source materials I used. If you click through those links and end up buying any of the cookbooks I mention, Amazon will send me some money.
 
-[^flour]: If you've never been to Flour, I highly recommend it. I always make sure I have time to swing by whenever I'm in the Boston area.
+[^flour]: If you've never been to [Flour](https://flourbakery.com/), I highly recommend it. I always make sure I have time to swing by whenever I'm in the Boston area.
