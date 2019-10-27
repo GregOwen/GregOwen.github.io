@@ -14,11 +14,11 @@ tags:
 
 After having to manually reconfigure all of my dotfiles for the 3rd or 4th time, I decided it was finally time to put them into version control. While I was poking around the internet to see how other people did this, I came across [this post](https://news.ycombinator.com/item?id=11070797) on Hacker News that described how to use Git's "bare repository" feature to track my dotfiles without turning my home folder into a Git repo.
 
-This sounded great, but I had never heard of a bare repository before and so I wanted to understand more before I committed all of my dotfiles to this thing. After sifting through piles of blog posts and StackOverflow answers, I remained unenlightened. I hope this post will be helpful to anybody else who wants to know what the heck a bare repository is and when you would want to use one.
+This sounded great, but I had never heard of a bare repository before, and I wanted to understand more before I committed all of my dotfiles to this thing. After sifting through piles of blog posts and StackOverflow answers, I remained unenlightened. I eventually figured it out by digging deeper into Git's storage model, and decided to write up the pieces that were missing from the other explanations I found. I hope this post will be helpful to anybody else who wants to know what the heck a bare repository is and when you would want to use one.
 
-# What is a bare repository?
+# What is a bare Git repository?
 
-I assume that you've worked with a Git repo before. You've probably run `git init` to create a new repository on your local machine or run `git clone` to download a repo from GitHub/GitLab/BitBucket. You've probably even worked on different branches, made pull requests, and gone back to old commits to figure out what you were thinking when you added that code.
+I assume that you've worked with a Git repo before. You've probably run `git init` to create a new repository on your local machine or run `git clone` to download a repo from GitHub/GitLab/BitBucket. You've probably even worked on different branches, made pull requests, and gone back to an old commit to figure out what you were thinking when you added that code.
 
 That repo you've been using is a **non-bare repository**. It contains two pieces of state:
 
@@ -27,7 +27,7 @@ That repo you've been using is a **non-bare repository**. It contains two pieces
 
 The **snapshot** is what you probably think of as your project: your code files, build files, helper scripts, and anything else you version with Git. I call this a snapshot because it's what your files happen to look like at one point in time. If you check out a different commit, the files change: you're looking at a snapshot from a different point in time.
 
-The **history** is what allows you to check out that other commit and get a complete snapshot of what the files in your repository looked like when that commit was added. It's internal to Git and you've probably never interacted with it directly.
+The **history** is the state that allows you to check out that other commit and get a complete snapshot of what the files in your repository looked like when that commit was added. It consists of a bunch of data structures that are internal to Git that you've probably never interacted with directly.
 
 In a non-bare repository, the history is stored in the `.git` folder at the top level of your repository (I encourage you to poke around in it by running `tree .git`[^repository-layout] - go ahead, I'll wait). The most important piece to understand here is that the history doesn't just store metadata (e.g. "User U added this many lines to File F at Time T as part of Commit C"), it also stores data (e.g. "User U added *these exact lines* to File F").
 
@@ -35,7 +35,7 @@ The key idea of a bare repository is that you don't actually need to have the sn
 
 A **bare repository** is a Git repository that does not have a snapshot. It just stores the history. It also happens to store the history in a slightly different way[^different-storage], but that's not nearly as important.
 
-A bare repository will still store your files (the history has enough data to reconstruct the state of your files at any commit). You can also create a non-bare repository from a bare repository: if you `git clone` a bare repository, Git will automatically create a snapshot for you in the new repository (if you want a bare repository, use `git clone --bare`).
+A bare repository will still store your files (remember, the history has enough data to reconstruct the state of your files at any commit). You can even create a non-bare repository from a bare repository: if you `git clone` a bare repository, Git will automatically create a snapshot for you in the new repository (if you want a bare repository, use `git clone --bare`).
 
 # So why would we use a bare Git repository?
 
@@ -49,19 +49,21 @@ Bringing us back full-circle, we can now look at why you'd want a bare Git repo 
 
 We already covered the fact that Git repos don't need to store a snapshot of the files tracked by the repo. More generally, Git repos don't need to store that snapshot *in the same folder as the history*. You can store your history in one folder and your snapshot in a different folder.
 
-This is why it's nice to use a bare repo to track dotfiles (or any set of files that already exist in some location that you don't want to turn into a Git repo): you can leave the dotfiles where they are (so that they'll still get picked up by the different tools that use them) while still getting the benefits of version control. Your history will live in a separate folder, while your dotfiles (your snapshot) can live wherever they need to be. You don't need to manually link dotfiles from your Git repo to their correct locations, and you don't need to turn your home directory into a Git repo[^no-home-git-repo].
+This is why it's nice to use a bare repo to track dotfiles (or any set of files that already exist in some location that you don't want to turn into a Git repo): you can leave the dotfiles where they are (so that they'll get picked up by the different tools that use them) while still getting the benefits of version control. Your history will live in a separate folder, while your dotfiles (your snapshot) can live wherever they need to be. You don't need to manually link dotfiles from your Git repo to their correct locations, and you don't need to turn your home directory into a Git repo[^no-home-git-repo].
 
 ## Initial setup
 
-To set yourself up with a bare Git repo for your dotfiles, do the following[^testing]. At a high level, we're creating a bare repo in a new directory to store the history of our dotfiles. Then we tell Git that the snapshot for that repo actually lives in your home directory, not the directory that contains the bare repo's history (this lets us keep your dotfiles in your home directory rather than the directory that has the history). We won't commit the entire home directory (which would take up a lot of space and probably put some important secrets on GitHub), just the pieces that you want to add to version control.
+Here's how you can set yourself up with a bare Git repo for your dotfiles[^testing]. At a high level, we're creating a bare repo in a new directory to store the history of our dotfiles. Then we tell Git that the snapshot for that repo actually lives in your home directory, not the directory that contains the bare repo's history (this lets us keep your dotfiles in your home directory rather than the directory that has the history). We won't commit the entire home directory (which would take up a lot of space and probably put some important secrets on the internet), just the pieces that you want to add to version control.
 
 1. Create a new bare Git repo to store the history for your dotfiles.
 
         git init --bare $HOME/dotfiles
 
-1. Tell Git that it should use your home directory as the snapshot for this bare Git repo (`--git-dir` tells Git where the history lives and `--work-tree` tells Git where the snapshot lives, since the snapshot is called the "working tree" in Git jargon). We create an aliased command here so that you don't have to specify these options manually every time you want to add a dotfile to your Git repo. If you want to use this command in the future, you should add this line to your `.bashrc` or `.zshrc` or whatever dotfile you use for aliases.
+1. Tell Git that it should use your home directory as the snapshot for this bare Git repo.
 
         alias dotgit='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+    `--git-dir` tells Git where the history lives and `--work-tree` tells Git where the snapshot lives (the snapshot is called the "working tree" in Git jargon). We create an aliased command here so that you don't have to specify these options manually every time you want to add a dotfile to your Git repo. If you want to use this command in the future, you should add this line to your `.bashrc`, `.zshrc` or whatever dotfile you use for aliases.
 
 1. Tell Git that this repo should not display all untracked files (otherwise `git status` will include every file in your home directory, which will make it unusable).
 
@@ -83,7 +85,7 @@ To set yourself up with a bare Git repo for your dotfiles, do the following[^tes
 
 To download your dotfiles onto a new machine, do the following:
 
-1. Clone your repo onto the new machine as a non-bare repository. You need a non-bare repository on the new machine since you're trying to move the actual dotfiles (that is, the snapshot of your repo) onto the new machine, not just the history. With this command, we tell Git that the history should live in `$HOME/dotfiles`, but the snapshot should live in `dotfiles-tmp` (which is just an arbitrary temporary directory that we'll delete later once we've moved the dotfiles into their proper locations).
+1. Clone your repo onto the new machine as a non-bare repository. You need a non-bare repository on the new machine since you're trying to move the actual dotfiles (that is, the snapshot of your repo) onto the new machine, not just the history.
 
     ```
     git clone \
@@ -92,9 +94,13 @@ To download your dotfiles onto a new machine, do the following:
       dotfiles-tmp
     ```
 
-1. Copy the snapshot from your temporary directory to the correct locations on your new machine. This command copies every file in `dotfiles-tmp` and its subdirectories into the corresponding locations in your home directory (so `dotfiles-tmp/.gitconfig` will be copied to `~/.gitconfig` and `dotfiles-tmp/.emacs.d/init.el` will be copied to `~/.emacs.d/init.el`, etc.).
+     `--separate-git-dir` tells Git that the history should live in `$HOME/dotfiles` even though the snapshot will live in `dotfiles-tmp` (which is just an arbitrary temporary directory that we'll delete later once we've moved the dotfiles into their proper locations).
+
+1. Copy the snapshot from your temporary directory to the correct locations on your new machine.
 
         rsync --recursive --verbose --exclude '.git' dotfiles-tmp/ $HOME/
+
+    This command copies every file in `dotfiles-tmp` and its subdirectories into the corresponding locations in your home directory (so `dotfiles-tmp/.gitconfig` will be copied to `~/.gitconfig` and `dotfiles-tmp/.emacs.d/init.el` will be copied to `~/.emacs.d/init.el`, etc.).
 
 1. Remove the temporary directory. Now that we've copied over the snapshot to the correct locations in your actual home directory, we can delete the old snapshot.
 
