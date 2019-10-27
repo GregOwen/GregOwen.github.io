@@ -1,6 +1,6 @@
 ---
 title: "Using a bare Git repo to get version control for my dotfiles"
-date: 2019-10-23T14:46:00-07:00
+date: 2019-10-26T14:00:00-07:00
 editors:
   - Bianca Homberg
 classes: wide
