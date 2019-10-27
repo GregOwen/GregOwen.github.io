@@ -53,7 +53,6 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
-  - octopress-littlefoot
 
 author:
   name   : "Greg Owen"
