@@ -1,0 +1,36 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+.sidebar {
+    @include breakpoint($large) {
+	/* Keep the sidebar image at full opacity */
+	opacity: 1.0;
+
+	.author__content, .author__urls-wrapper {
+	    /* Keep the rest of the sidebar slightly dimmed unless hovered over */
+	    opacity: 0.75;
+	    &:hover {
+		opacity: 1;
+	    }
+	}
+    }
+
+    /* Remove the border and padding around my headshot */
+    .author__avatar img {
+	padding: 0px;
+	border: 0px;
+    }
+}
+
+#about-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 50%;
+}
