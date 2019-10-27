@@ -34,3 +34,8 @@
     margin-right: auto;
     max-width: 50%;
 }
+
+p > code, a > code, li > code, figcaption > code, td > code {
+    white-space: nowrap; // Don't split an inline code section across multiple lines
+    background: #e4e4e4; // Make the code background more pronounced
+}
