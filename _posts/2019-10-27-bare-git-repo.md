@@ -1,8 +1,6 @@
 ---
 title: "Using a bare Git repo to get version control for my dotfiles"
 date: 2019-10-26T14:00:00-07:00
-redirect_from:
-  - /blog/bare-git-repo
 editors:
   - Bianca Homberg
 classes: wide
