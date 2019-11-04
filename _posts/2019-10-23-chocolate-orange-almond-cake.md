@@ -1,11 +1,12 @@
 ---
 title: "Recreating the Prolific Oven's Chocolate Orange Almond Cake"
-date: 2019-10-23T18:05:00-07:00
+date: 2019-11-03T16:20:00-08:00
 toc: true
 toc_sticky: true
 categories:
-  - blog
+  - food
 tags:
+  - baking
   - cake
   - chocolate
   - Prolific Oven
