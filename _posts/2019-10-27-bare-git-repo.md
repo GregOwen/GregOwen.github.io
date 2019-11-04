@@ -5,7 +5,7 @@ editors:
   - Bianca Homberg
 classes: wide
 categories:
-  - software engineering
+  - programming
 tags:
   - dotfiles
   - git
