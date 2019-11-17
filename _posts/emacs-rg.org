@@ -1,0 +1,7 @@
+* Install rg
+* Make sure it's on your path
+** Is there anything special to be done for emacs here?
+* Customize M-x grep in Emacs
+** M-x customize-group RET grep --> (grep-apply-setting grep-command VALUE)
+** Including cursor position?
+* Custom keybinding for grep
