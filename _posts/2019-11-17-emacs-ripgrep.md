@@ -1,6 +1,7 @@
 ---
 title: "Blazing-fast jump-to-grep in Emacs using ripgrep"
 date: 2019-11-17T13:20:00-08:00
+classes: wide
 categories:
   - programming
 tags:
@@ -11,9 +12,9 @@ tags:
   - tools
 ---
 
-I've recently started using [ripgrep](https://github.com/BurntSushi/ripgrep) for my day-to-day `grep` needs, and it's fantastic. It's just [so fast](https://blog.burntsushi.net/ripgrep/). It may not sound like much, but there's a huge difference between waiting a few seconds for search results and having them instantly. It means that searching doesn't break my flow.
+I've recently started using [ripgrep](https://github.com/BurntSushi/ripgrep) for my day-to-day `grep` needs, and it's fantastic. It's just [so fast](https://blog.burntsushi.net/ripgrep/). It may not sound like much, but there's a huge difference between waiting a few seconds for search results and having them instantly: it means that searching doesn't break my flow.
 
-The killer app for a lightning-fast regex search is jump-to-grep. What I really want is to call ripgrep from within Emacs, find results across my entire git repo, and jump to any of them. Here's how to make that happen.
+After trying ripgrep from the command line, what I really wanted was to call it from within Emacs, find results across my entire Git repo, and jump to the matches it found ("jump-to-grep") without having to switch back to the terminal. Here's how to make that happen.
 
 1. Install ripgrep. Follow the instructions on the [GitHub repo](https://github.com/BurntSushi/ripgrep#installation)
 
@@ -26,7 +27,6 @@ The killer app for a lightning-fast regex search is jump-to-grep. What I really 
 1. Tell Emacs to use ripgrep instead of its default grep command. Add the following to your `~/.emacs` file, your `~/.emacs.d/init.el` file, or wherever you put your custom Emacs configuration
 
     ```
-    ;; Use ripgrep as the default grep command in M-x grep-find
     (grep-apply-setting
       'grep-find-command
       '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)
@@ -51,6 +51,6 @@ The killer app for a lightning-fast regex search is jump-to-grep. What I really 
 
         (global-set-key (kbd "C-x C-g") 'grep-find)
 
-1. Try it out. Save and exit Emacs, then open up a file in some subdirectory of one of your Git repositories. Press `C-x C-g` and type a search term. You should see results from across your entire Git repo, not just the subdirectory you're currently in.
+1. Try it out. Save and exit Emacs, then open up a file in some subdirectory of one of your Git repositories. Press `C-x C-g` and type a search term. You should see results from across your entire Git repo, not just the subdirectory you're currently in. If you hover over one of the links and hit enter, Emacs should open that file and take you directly to that line.
 
 [^grep-find-not-grep]: As a side note, this is why we set `grep-find-command` rather than `grep-command`. For whatever reason, Emacs expects `grep-command` to be a raw string, which means that we can't specify where our cursor should start. Since we don't want the cursor to start at the end of the string (we'd have to move it back between the `''` every time before we could start typing our search term), we have to use `grep-find-command`.
