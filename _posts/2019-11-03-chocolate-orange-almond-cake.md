@@ -105,7 +105,7 @@ As with all chocolate baked goods, my go-to recipe comes from Lori Longbotham's 
 1. Reduce speed to low and add a bit of the dry ingredients, then a bit of the sour cream, then a bit of the dry ingredients, etc. until you've added all of both (don't overmix).
 1. Add the cocoa slurry and mix until the batter is even in color.
 1. Using a rubber spatula, transfer the batter to the pan.
-1. Bake until the top of the cake pops back when you poke it gently and a toothpick comes out clean. If your finger leaves a depression in the top of the cake, it needs more time.
+1. Bake about 40 minutes, until the top of the cake pops back when you poke it gently and a toothpick comes out clean. If your finger leaves a depression in the top of the cake, it needs more time.
 1. Set on a wire rack to cool.
 </div>
 </div>
