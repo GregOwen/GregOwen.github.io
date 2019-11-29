@@ -1,0 +1,17 @@
+{% if page.editors %}
+  {% capture editor_names %}
+    {% case page.editors.size %}
+      {% when 1 %}
+        {{ page.editors.first }}
+      {% when 2 %}
+        {{ page.editors.first }} and {{ page.editors.last }}
+      {% else %}
+        {% for editor in page.editors %}
+          {% if forloop.last %}and {% endif %}
+          {{editor}}
+          {% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      {% endcase %}
+  {% endcapture %}
+  <p class="page__meta-editors">Thanks to {{ editor_names }} for giving me feedback on this post</p>
+{% endif %}
