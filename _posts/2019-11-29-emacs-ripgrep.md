@@ -64,5 +64,3 @@ Every time I spelunk through my Emacs config to get something working, I try to 
 My first step was to understand how Emacs's grep integration works. I knew a little about the different [grep commands](https://www.gnu.org/software/emacs/manual/html_node/emacs/Grep-Searching.html) that Emacs exposes, but I didn't know much about how I could customize them. So from an Emacs buffer, I ran `M-x customize-group RET grep`. This opened a help buffer that explained that the default Emacs grep library allows you to change the command that appears when you run `M-x grep-find` by setting the variable `grep-find-command`. The help buffer also explained that I could set this value using `grep-apply-setting`.
 
 Finding the correct arguments to `rg` was as easy as reading `rg --help`.
-
-*Thanks to Bianca Homberg for giving me feedback on this post*

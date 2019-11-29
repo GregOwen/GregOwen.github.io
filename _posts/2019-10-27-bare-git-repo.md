@@ -110,9 +110,6 @@ To download your dotfiles onto a new machine, do the following:
 
 If you need to remember these commands in the future and would like a handy cheat sheet, see GitHub user Siilwyn's writeup [here](https://github.com/Siilwyn/my-dotfiles/tree/master/.my-dotfiles).
 
-*Thanks to Bianca Homberg for giving me feedback on this post*
-
-
 [^repository-layout]: You can also get a high-level (if somewhat jargony) explanation of what all the subfolders of `.git` do by running
 
     ```
