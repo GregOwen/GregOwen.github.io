@@ -1,0 +1,9 @@
+* Add explanation of what ripgrep is, don't just link to github repo
+* under 3, when you're explaining the code
+** you kind of also explain your process to figure out how it worked
+** you should be clear about which you're doing at which points
+** right now it kind of jumps back and forth
+* maybe focus -- are you teaching people about emacs settings or about ripgrep?  both?
+* difference between M-x grep and M-X grep-find?
+* way to make this work across repos?
+* if git rev-parse --show-toplevel throws error if not in repo, how does || pwd save it?
