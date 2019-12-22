@@ -1,0 +1,43 @@
+* Intro
+** What is a kubernetes ingress?
+** Existing explanations are too high level
+** Specific questions I want answered
+*** How does my traffic flow?
+*** How can I guarantee that my ingress is internal?
+**** Why would I want this?
+*** What happens when I create an Ingress object?
+*** What is a kubernetes ingress controller and how does it relate to ingresses?
+** What this post will not cover
+*** Why you would want to use an ingress
+*** The high-level "architecture" function of an ingress (that's what all the other blog posts do)
+* An ingress is a piece of configuration for an ingress controller
+** It does not create any infrastructure
+** If you do not have an ingress controller, it does nothing
+** If you have an ingress controller, the ingresses all get merged into a single set of rules for the controller
+** Why would you want this?
+*** Distribution of routing config instead of a single centralized table
+**** Kind of like Bazel build files
+* Ok, so what is an ingress controller?
+** This is the actual infrastructure
+** Going to discuss nginx only since it's multi-cloud, supported by k8s, and non-magical
+** Essentially, it's a load balancer (the fact that there's an nginx one is a hint)
+** The nginx installation guide creates a deployment and a service
+*** The service is the actual k8s service that your config will affect
+*** The deployment runs the load balancer and updates its rules in response to changes to ingress objects
+* How does traffic flow?
+** Client --> ingress controller service --> ingress controller pod --> downstream service --> downstream pod
+** Let's do an actual trace (can we?)
+** Check the logs to see which backend we're hitting
+* What happens when I create an ingress?
+** Ingress controller polls for changes
+** If it finds a change, it updates its internal rules
+*** NOTE: it might not always find a change :facepalm:
+** Walk through nginx code
+* How can I guarantee that my ingress is internal?
+** Since traffic flows through the ingress controller service, change that
+*** You can verify this by inspecting the ingress and seeing that it has an internal IP
+** Why would I want an internal ingress?
+*** Ingresses are more powerful than services
+**** Fancy load balancing rules
+**** Fancy networking rules like VPC pairing
+*** Stay tuned for my next blog post...
