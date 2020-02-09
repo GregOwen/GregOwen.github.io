@@ -41,3 +41,6 @@
 **** Fancy load balancing rules
 **** Fancy networking rules like VPC pairing
 *** Stay tuned for my next blog post...
+* Notes
+** I'm too harsh on the blog posts --> rewrite this
+** Compare GCP ingress controller with nginx one (and add table at end of post)
