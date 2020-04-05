@@ -11,17 +11,24 @@
 # Site settings
 title: Stegosaurus Dormant
 name: Greg Owen # Sets the copyright name in the footer
+description: >- # this means to ignore newlines until end of indentation
+  Greg Owen's blog on programming, software engineering, and sundry miscellany
+
 # logo: /assets/images/logo.svg # Sets the logo in the header
 svg_logo: /assets/images/logo.svg # Sets the logo in the About page
-email:
-description: >- # this means to ignore newlines until "baseurl:"
-  Greg Owen's blog on programming, software engineering, and sundry miscellany
+og_image: /assets/images/logo_social.png # Default image to use for shared links
+
+
 url: https://stegosaurusdormant.com
 baseurl: ""
+
+email:
 twitter_username: GregoryGOwen
 github_username: GregOwen
+
 minimal_mistakes_skin: default
 search: true
+
 
 # Build settings
 markdown: kramdown
