@@ -1,0 +1,58 @@
+* Brainstorm
+** Quote about naming being hard
+** Naming isn't just fluff: it has a functional purpose
+*** Ousterhout on obscurity
+*** Engineering velocity value
+*** Bad naming is tech debt
+**** Harder to understand
+**** Harder to onboard new engineers
+**** Harder to change/more likely to break
+***** More info needed to know that change is correct --> greater chance that author or reviewer meesses up
+** Codenames
+*** Trying to hint about one subset of words while *not* hinting about another subset
+*** Also, need to be succinct
+**** Codenames gives you only one word
+**** Programming can give you more, but there's a limit to your JavaCamelExtravaganza
+*** Diagram!
+** ML
+*** Meaning is a high-dimensional space
+**** Word2Vec
+*** Concepts are points in that space
+*** Want to have a name that provides a clean decision boundary between the concepts that are associated with your object and the concepts that are associated with its alternatives/predecessors/successors
+** Need to know what makes your object distinct
+*** What are the attributes that are important to an engineer reading code that interacts with your object
+*** What other objects might your object be confused with
+**** What would the behavioral consequences be of such a confusion?
+**** What do I need to know as the client in order to interact with your object safely/performantly?
+** Guidelines
+*** Cut out useless words
+**** "Manager" conveys no meaning
+*** Don't name things "NewFoo"
+**** What happens when you need to deprecate that one?
+**** Doesn't tell me when/why I should use New vs Old
+*** Beware of cultural references
+**** As in Codenames, these can clue a rich set of meanings if the person reading them knows the reference (and thinks of the reference the same way you do)
+**** As in Codenames, these can be counterproductive if they're not shared
+***** Especially likely in the Bay Area, where many adults were born in a different country
+**** Example: Greek mythology
+***** Sisyphus and Lethe are hard to spell/pronounce, don't enhance understanding
+***** If the explanation of why the service has this name is more likely to teach you about the namesake than the service, it's a bad name
+* Outline
+** Quote
+** Naming as a feature
+** Codenames
+*** Brief intro to the game
+*** Diagram
+**** ML commentary as footnote
+** Analogy to naming
+*** Trying to clue clients of your code how it can/should be used, using as few words as possible
+**** Name is an interface to the implementation
+**** In fullness of time, clients could read full docs/implementation, but that sucks
+**** The more info I get from the name, the faster I can get productive
+***** Connection to mental models from DET
+*** Good names are decision boundaries --> need to know what is essential to your object and what is essentially *NOT* your object
+**** When/how should your object *not* be used? What are the consequences?
+** Guidelines
+*** Useless words, NewFoo, references
+*** Names are what and how, comments are why
+**** Example: NonDeadlockingFoo, SyncPostgresClient, SamlAuthContext
