@@ -28,7 +28,7 @@ From the clue-giver's perspective, the basic problem looks like this:
     <img src="/assets/images/codenames_words.png" alt="alt text html" class="full">
 </figure>
 
-You have some words that you want your teammates to guess (the blue dots), and some words you *don't* want your teammates to guess (the red dots)[^other-cards]. You need to choose a hint that is strongly associated with your words and not strongly associated (or even negatively associated) with the other team's words[^higher-dimensional].
+You have some words that you want your teammates to guess (the blue dots), and some words you *don't* want your teammates to guess (the red dots)[^other-cards]. You need to choose a hint that is strongly associated with your words and not strongly associated with the other team's words[^higher-dimensional].
 
 Naming an object (variable/function/class/module) is essentially the same thing as giving a clue in Codenames.
 
@@ -36,9 +36,9 @@ You're trying to communicate to your teammates (coworkers, clients, open-source 
 
 # Corollary: know what your object is not
 
-So far I've completely glossed over a necessary precondition of using the Codenames Theory of Naming: figuring out what the blue and red dots are for your object. Like all good theories, most of the work is in the preparation.
+One thing the Codenames Theory of Naming makes explicit is that the first step to finding a good name for your object is to figure out the blue and red dots.
 
-Figuring out the blue dots is generally pretty straightforward: these are the things you want your readers to think about when they read your object's name. You probably have a good idea of what your object does and why the reader would care about it, so this shouldn't be too hard. If you're stuck here, explain to someone else why your object needs to exist. The nouns and verbs in that explanation are your blue dots.
+The blue dots are generally pretty straightforward: these are the things you want your readers to think about when they read your object's name. You probably have a good idea of what your object does and why the reader would care about it, so this shouldn't be too hard. If you're stuck here, explain to someone else why your object needs to exist. The nouns and verbs in that explanation are your blue dots.
 
 The red dots can be substantially trickier: these are the things that you want your readers *not* to associate with your object. You want to distinguish your object from these things so that readers know the boundaries of what your object does. This requires a certain amount of imagination, because you have to put yourself in the shoes of your reader: if they stumble upon your object while trying to understand a piece of code, what assumptions might they have about your object's behavior? Which of those assumptions are wrong?
 
@@ -48,7 +48,7 @@ If you want a list of reasonable alternatives, you need to have some idea of the
 
 # Applying the theory
 
-To recap the Codenames Theory of Naming,
+To apply the Codenames Theory of Naming next time you're coding,
 
 1. Come up with a list of words that describe the behavior your object has or the way it is used
 1. Come up with a list of words that describe behavior your object does NOT have or alternative approaches that readers might think your object would take
@@ -59,6 +59,6 @@ To recap the Codenames Theory of Naming,
 
 [^higher-dimensional]: I've drawn the diagram in two dimensions, which obviously loses a lot of the nuance of the problem. The association between "buck" and "lion" is different from the association between "buck" and "check". It's more accurate to think of words as points in a high-dimensional space where each dimension corresponds to some aspect of meaning (the approach taken by [Word2vec](https://en.wikipedia.org/wiki/Word2vec)). In that framing, you're trying to establish a clean decision boundary between the blue dots and the red dots, and you have to communicate that decision boundary by providing another dot as a hint.
 
-[^java-camel]: Some languages conventionally allow longer names than others, but even in the more verbose languages, people get tired of discovering a new species of `MultipleAdjectiveAgglutinativeJavaCamel` on every line.
+[^java-camel]: Some languages will conventionally allow longer names than others, but even in the more verbose languages, people get tired of discovering a new species of `MultipleAdjectiveAgglutinativeJavaCamel` on every line.
 
-[^no-new-foo]: This should be obvious, but just tacking on `New` to the name is not a good way of distinguishing the new system from the old system. I sincerely hope that the difference between the two versions is more significant than "one was started after the other" - use that difference as a starting point. Also, if you call this version `New`, what will you call the next version? `Next`? [That would be silly](https://en.wikipedia.org/wiki/Housing_at_the_Massachusetts_Institute_of_Technology#Undergraduate_dorms).
+[^no-new-foo]: This should be obvious, but just tacking on `New` to the name is not a good way of distinguishing the new system from the old system. I sincerely hope that the difference between the two versions is more significant than "one was started after the other" - use that difference as a starting point. Also, if you call this version `New`, what will you call the next version? `Next`? [That would be silly.](https://en.wikipedia.org/wiki/Housing_at_the_Massachusetts_Institute_of_Technology#Undergraduate_dorms)
