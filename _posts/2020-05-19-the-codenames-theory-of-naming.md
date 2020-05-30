@@ -16,7 +16,7 @@ Bad naming has a real cost, and not just in terms of well-worn jokes. Names are 
 
 To borrow the framing John Ousterhout uses in [A Philosophy of Software Design](https://www.amazon.com/Philosophy-Software-Design-John-Ousterhout/dp/1732102201), bad names increase the complexity of the codebase, since I need to hold more stuff in my head at the same time in order to understand the behavior of the system. On a practical level, worse names mean more time writing code and more time reviewing code and more time fixing bugs from poorly-written and poorly-reviewed code.
 
-So bad naming is bad. Here's an approach that has helped me find better names.
+So bad naming is bad. How can we make it easier to come up with good names?
 
 # Codenames
 
@@ -24,13 +24,13 @@ So bad naming is bad. Here's an approach that has helped me find better names.
 
 From the clue-giver's perspective, the basic problem looks like this:
 
-diagram
+<figure>
+    <img src="/assets/images/codenames_words.png" alt="alt text html" class="full">
+</figure>
 
 You have some words that you want your teammates to guess (the blue dots), and some words you *don't* want your teammates to guess (the red dots)[^other-cards]. You need to choose a hint that is strongly associated with your words and not strongly associated (or even negatively associated) with the other team's words[^higher-dimensional].
 
 Naming an object (variable/function/class/module) is essentially the same thing as giving a clue in Codenames.
-
-diagram
 
 You're trying to communicate to your teammates (coworkers, clients, open-source community members) that this object has some types of behavior (blue dots), and does not have other types (red dots) using a limited number of words[^java-camel]. For example, you might use your name to clarify how the object was produced (`PasswordCredentials`, `configFileJson`), how it will be consumed (`oauthRedirectUrl`, `AdminSettingsView`), over what duration it will be valid (`UserSession`, `TransactionLog`), whether it is or is not suitable for a particular purpose (`NonDeadlockingDatabaseClient`, `getJobStatusSync`, `MockClock`), etc.
 
@@ -57,7 +57,7 @@ To recap the Codenames Theory of Naming,
 
 [^other-cards]: There are also other cards in the game, but those details don't matter to the analogy so I'm ignoring them.
 
-[^higher-dimensional]: I've drawn the diagram in two dimensions, but you can also think of words as points in a high-dimensional space where each dimension corresponds to some aspect of meaning (the approach taken by [Word2vec](https://en.wikipedia.org/wiki/Word2vec)). In that framing, you're trying to establish a clean decision boundary between the blue dots and the red dots, but you have to communicate that decision boundary by providing another dot as a hint.
+[^higher-dimensional]: I've drawn the diagram in two dimensions, which obviously loses a lot of the nuance of the problem. The association between "buck" and "lion" is different from the association between "buck" and "check". It's more accurate to think of words as points in a high-dimensional space where each dimension corresponds to some aspect of meaning (the approach taken by [Word2vec](https://en.wikipedia.org/wiki/Word2vec)). In that framing, you're trying to establish a clean decision boundary between the blue dots and the red dots, and you have to communicate that decision boundary by providing another dot as a hint.
 
 [^java-camel]: Some languages conventionally allow longer names than others, but even in the more verbose languages, people get tired of discovering a new species of `MultipleAdjectiveAgglutinativeJavaCamel` on every line.
 
