@@ -25,7 +25,7 @@ So bad naming is bad. How can we make it easier to come up with good names?
 From the clue-giver's perspective, the basic problem looks like this:
 
 <figure>
-    <img src="/assets/images/codenames_words.png" alt="alt text html" class="full">
+    <img src="/assets/images/codenames_words.svg" alt="alt text html" class="full">
 </figure>
 
 You have some words that you want your teammates to guess (the blue dots), and some words you *don't* want your teammates to guess (the red dots)[^other-cards]. You need to choose a hint that is strongly associated with your words and not strongly associated with the other team's words[^higher-dimensional].
