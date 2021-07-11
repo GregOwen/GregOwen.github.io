@@ -73,7 +73,7 @@ To understand what's going on, we need to look at what happens when generics (in
 
 # Implementing `#[derive(Clone)]`: a naive approach
 
-Let's consider how we'd implement `#[derive(Clone)]` for a struct. Our derive function will take in a description of the underlying struct, then emit Rust code that defines the implementation of `Clone` for that struct[^procedural-macros].
+Let's consider how we'd implement `#[derive(Clone)]` for a struct. We want to write a deriver function that will take in a description of the underlying struct, then emit Rust code that defines the implementation of `Clone` for that struct[^procedural-macros].
 
 To keep things simple, let's just look at the Rust code that we're going to emit. "The derived implementation of `Clone` calls `clone` on each field" sounds pretty straightforward. We can imagine our implementation looking like this:
 
@@ -121,7 +121,7 @@ impl<B, C> Clone for Foo<B, C> {
 }
 ```
 
-As before, the compiler will check our emitted code. `self.a.clone()` is fine, since `u32` implements `Clone`. `self.b.clone()` is fine, since `Rc<B>` implements `Clone` no matter what `B` is. `self.c.clone()`, however, will fail: we have no information about `C`, so the compiler can't guarantee that it implements `Clone`.
+As before, the compiler will check our emitted code. `self.a.clone()` is fine, since `u32` implements `Clone`. `self.b.clone()` is fine, since `Rc<B>` implements `Clone` no matter what `B` is. `self.c.clone()` is _not_ fine: we have no information about `C`, so the compiler can't guarantee that it implements `Clone`.
 
 We could fix the problem by adding a type constraint on `C`:
 
@@ -179,7 +179,7 @@ There's a lot of name mangling and weird reference stuff going on, but we can ig
 impl<B: ::core::clone::Clone, C: ::core::clone::Clone> ::core::clone::Clone for Foo<B, C>
 ```
 
-This is how `#[derive(Clone)]` guarantees that it can call `self.c.clone()`: it adds a type constraint on `C` so that `Foo<B, C>` only implements `Clone` when `C` implements `Clone`. This is another reasonable solution to the problem: whereas `Foo<B, C: Clone>` says that you can only create a `Foo<B, C>` when `C` implements `Clone`, this implementation says that you can _create_ a `Foo<B, C>` with any `B` and `C` you like, but that you can only _clone_ your `Foo<B, C>` if `C` implements `Clone`.
+This is how `#[derive(Clone)]` guarantees that it can call `self.c.clone()`: it adds a type constraint on `C` so that `Foo<B, C>` only implements `Clone` when `C` implements `Clone`. This is another reasonable solution to the problem: whereas the `struct Foo<B, C: Clone>` implementation above says that you can only create a `Foo<B, C>` when `C` implements `Clone`, this implementation says that you can _create_ a `Foo<B, C>` with any `B` and `C` you like, but that you can only _clone_ your `Foo<B, C>` if `C` implements `Clone`.
 
 But there's something else going on here. This implementation also adds the `B: Clone` constraint, even though we don't need that constraint for `Foo<B, C>` to implement `Clone`. Remember, the `b` field of `Foo<B, C>` is a `Rc<B>`. `b.clone()` will typecheck for any `B`.
 
@@ -195,11 +195,11 @@ impl<B, C: Clone> Clone for Foo<B, C>
 
 The problem is that this requires the macro to inspect the fields of `Foo<B, C>`, figure out which ones are already `Clone`, and only add the type constraint for the other fields. Rust's procedural macros don't have access to the Rust compiler, so the macro would have to implement all of the necessary type checking by itself.
 
-What's worse, this kind of inspection is actually impossible in practice. The definition of `Foo<B, C>` might include reference to arbitrary other types, including types defined elsewhere in the crate. The input to the macro is just the list of tokens that define `Foo<B, C>`. It only gets syntactic information ("the name of the type of this field is `Rc<B>`") rather than semantic information (the definition of the `Rc` type).
+What's worse, this kind of inspection is actually impossible in practice. The input to the macro is just the list of tokens that define `Foo<B, C>`. It only gets syntactic information ("the name of the type of this field is `Rc<B>`") rather than semantic information (the definition of the `Rc` type), so the macro would need to do its type checking given only the names of the types being referenced. The definition of `Foo<B, C>` might include references to arbitrary other types, including types defined elsewhere in the crate, so there's no way the macro can know how to check if the type implements `Clone` given only its name.
 
 # Do we have to inspect the fields?
 
-How much could we optimize while still only manipulating tokens at the syntactic level? For example, we could imagine an implementation that adds exactly the type constraints it needs:
+So we can't check if our fields are guaranteed to implement `Clone`. Can we avoid unnecessary type constraints by being a little more clever? For example, we could imagine an implementation that adds exactly the type constraints it needs:
 
 ```rust
 impl<B, C> Clone for Foo<B, C> where Rc<B>: Clone, C: Clone
@@ -207,9 +207,9 @@ impl<B, C> Clone for Foo<B, C> where Rc<B>: Clone, C: Clone
 
 Here we've just taken the exact types of the fields that use our generic type parameters and constrained those types to implement `Clone`. This seems like exactly what we want: `Rc<B>: Clone` is true for all `B`, so `C: Clone` is the only nontrivial constraint.
 
-While this works for our current example, it has some unfortunate downsides. First of all, we've just revealed that `Foo<B, C>` uses an `Rc<B>`. Since `b` was a private field of `Foo`, it's a little weird to leak this information.
+This works for our current example, but it has some unfortunate downsides. First of all, we've just revealed that `Foo<B, C>` uses an `Rc<B>`. Since `b` was a private field of `Foo`, it's a little weird to leak this information.
 
-The bigger downside, though, is that we might start leaking private types. Let's take a look at this example:
+The bigger downside, though, is that we might start leaking private _types_. Let's take a look at this example:
 
 ```rust
 struct PrivateFoo<B> {
@@ -239,11 +239,11 @@ where
 }
 ```
 
-Here our private type `PrivateFoo<B>` is now part of the public signature of our `Clone` implementation. This will break compilation, and in a way that I would find particularly surprising if I encountered it[^relative-surprise]. There's a pretty good discussion of other scary and exciting consequences of this type of implementation on this [Github issue](https://github.com/rust-lang/rust/issues/26925), which was the source for most of this blog post.
+Here our private type `PrivateFoo<B>` is now part of the public signature of our `Clone` implementation. This will break compilation: the Rust compiler will throw `error[E0446]: private type PrivateFoo<B> in public interface`. I think this error is a lot worse than the `trait bound NNC: Clone is not satisfied` error we get with the current implementation of `#[derive(Clone)]`, since this error sounds scarier and doesn't seem obviously related to implementing `Clone`. If I saw this error, I'd probably think something was wrong elsewhere in my program and waste a bunch of time trying to track it down[^relative-surprise][^other-scary-consequences].
 
 # The workaround
 
-Ok, so a lot of the alternative ways to derive `Clone` seem like they wouldn't actually work. My struct is still broken. How do I fix it?
+Ok, so we've looked at a bunch of alternative ways to derive `Clone` and none of them seem like they would actually work. My struct is still broken. How do I fix it?
 
 The answer, it turns out, is pretty straightforward: just implement `Clone` manually instead of deriving it. Unlike `#[derive(Clone)]`, you only need to solve the problem for one struct and you have access to semantic information about all of the types you're using. You can pick the exact type constraints you want.
 
@@ -256,8 +256,11 @@ By now we've seen a few possible implementations for `#[derive(Clone)]`. The per
 Here are the two most plausible implementations:
 
 |Implementation|No type constraints|Type constraints on all type parameters|
+|Example|`impl<B, C> Clone for Foo<B, C> { ... }`|`impl<B: Clone, C: Clone> Clone for Foo<B, C> { ... }`|
 |Works when|All fields implement `Clone` regardless of the input types|All input types implement `Clone`|
-|Breaks when|At least one field might not implement `Clone` for some input type|At least one field implements `Clone` regardless of the input types, but at least one input type doesn't implement `Clone`|
+|Breaks when|At least one field might not implement `Clone` for some input type|At least one field implements `Clone` regardless of the input types (for example, an `Rc<T>`), but at least one of that field's input types doesn't implement `Clone`|
+
+Given the situations in which these two implementations break down and the fact that the workaround is so straightforward, I'm not surprised that the authors of `#[derive(Clone)]` chose the "type constraints on all type parameters" approach.
 
 [^clone-is-an-example]: I'm using `Clone` as my example here, but this discussion applies to any derivable trait. If you're not familiar with `Clone`, you can basically think of it as "any object that implements Clone can be deep-copied". Here's [a good explainer](https://hashrust.com/blog/moves-copies-and-clones-in-rust/).
 
@@ -269,4 +272,6 @@ Here are the two most plausible implementations:
 
 [^cargo-expand]: If you're having trouble getting `cargo expand` to run, I have [a blog post](/rustfmt-nightly) just for you.
 
-[^relative-surprise]: To be specific, the error would be `error[E0446]: private type PrivateFoo<B> in public interface`. While the error message would tell me that this error came from the macro implementation of `Clone`, before going down this rabbit hole I would have had no idea why an implementation of `Clone` would leak a private type. This obviously isn't a quantitative measure, but somehow this seems like a scarier error than `the trait bound B: Clone is not satisfied`.
+[^relative-surprise]: While the error message would tell me that this error came from the macro implementation of `Clone`, before going down this rabbit hole I would have had no idea why an implementation of `Clone` would leak a private type.
+
+[^other-scary-consequences]: This is by no means an exhaustive list of what could go wrong with this type of implementation. There's a pretty good discussion of other scary and exciting consequences on this [Github issue](https://github.com/rust-lang/rust/issues/26925), which was the source for most of this blog post.
