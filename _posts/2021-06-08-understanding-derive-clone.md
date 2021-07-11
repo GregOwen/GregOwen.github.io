@@ -114,49 +114,46 @@ To keep things simple, let's just look at the Rust code that we're going to emit
   </tr>
 </table>
 
-```rust
-struct Foo {
-  a: u32,
-  b: Vec<u32>,
-  c: bool
-}
-```
-
-```rust
-impl Clone for Foo {
-  fn clone(&self) -> Self {
-    Foo {
-      a: self.a.clone(),
-      b: self.b.clone(),
-      c: self.c.clone(),
-    }
-  }
-}
-```
-
 Once our macro emits this Rust code, the compiler will come along and check whether the code we emitted actually compiles. In this case, the code just calls `clone` on each field of the input struct. If every field implements `Clone`, then this will typecheck and the compiler will be happy. If some field doesn't implement `Clone`, the compiler will see us calling `field.clone()` on that field and throw an error.
 
 This approach works fine as long as the input struct doesn't have any type parameters. But what happens if it does?
 
-```rust
-struct Foo<B, C> {
-  a: u32,
-  b: Rc<B>,
-  c: C,
-}
-```
+<table class="two-column-code">
+  <tr>
+    <td>
+      <div>Struct</div>
+    </td>
+    <td>
+      <div>Implementation</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">a</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span>
+  <span class="n">b</span><span class="p">:</span> <span class="nb">Rc</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">c</span><span class="p">:</span> <span class="n">C</span><span class="p">,</span>
+<span class="p">}</span>
 
-```rust
-impl<B, C> Clone for Foo<B, C> {
-  fn clone(&self) -> Self {
-    Foo {
-      a: self.a.clone(),
-      b: self.b.clone(),
-      c: self.c.clone(), // problem!
-    }
-  }
-}
-```
+
+
+
+</code></pre></div></div>
+    </td>
+    <td>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">impl</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="n">Clone</span> <span class="k">for</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+    <span class="n">Foo</span> <span class="p">{</span>
+      <span class="n">a</span><span class="p">:</span> <span class="k">self</span><span class="py">.a</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">b</span><span class="p">:</span> <span class="k">self</span><span class="py">.b</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">c</span><span class="p">:</span> <span class="k">self</span><span class="py">.c</span><span class="nf">.clone</span><span class="p">(),</span> <span class="c">// problem!</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+    </td>
+  </tr>
+</table>
 
 As before, the compiler will check our emitted code. `self.a.clone()` is fine, since `u32` implements `Clone`. `self.b.clone()` is fine, since `Rc<B>` implements `Clone` no matter what `B` is. `self.c.clone()` is _not_ fine: we have no information about `C`, so the compiler can't guarantee that it implements `Clone`.
 
@@ -248,33 +245,50 @@ This works for our current example, but it has some unfortunate downsides. First
 
 The bigger downside, though, is that we might start leaking private _types_. Let's take a look at this example:
 
-```rust
-struct PrivateFoo<B> {
-  b: B,
-}
+<table class="two-column-code">
+  <tr>
+    <td>
+      <div>Struct</div>
+    </td>
+    <td>
+      <div>Implementation</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">PrivateFoo</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">b</span><span class="p">:</span> <span class="n">B</span><span class="p">,</span>
+<span class="p">}</span>
 
-pub struct Foo<B, C> {
-  a: u32,
-  b: PrivateFoo<B>,
-  c: C,
-}
-```
+<span class="k">pub</span> <span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">a</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span>
+  <span class="n">b</span><span class="p">:</span> <span class="n">PrivateFoo</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">c</span><span class="p">:</span> <span class="n">C</span><span class="p">,</span>
+<span class="p">}</span>
 
-```rust
-impl<B, C> Clone for Foo<B, C>
-where
-  PrivateFoo<B>: Clone,
-  C: Clone,
-{
-  fn clone(&self) -> Self {
-    Foo {
-      a: self.a.clone(),
-      b: self.b.clone(),
-      c: self.c.clone(),
-    }
-  }
-}
-```
+
+
+
+</code></pre></div></div>
+    </td>
+    <td>
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">impl</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span> <span class="n">Clone</span> <span class="k">for</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span>
+<span class="k">where</span>
+  <span class="n">PrivateFoo</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">:</span> <span class="n">Clone</span><span class="p">,</span>
+  <span class="n">C</span><span class="p">:</span> <span class="n">Clone</span><span class="p">,</span>
+<span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+    <span class="n">Foo</span> <span class="p">{</span>
+      <span class="n">a</span><span class="p">:</span> <span class="k">self</span><span class="py">.a</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">b</span><span class="p">:</span> <span class="k">self</span><span class="py">.b</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">c</span><span class="p">:</span> <span class="k">self</span><span class="py">.c</span><span class="nf">.clone</span><span class="p">(),</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+    </td>
+  </tr>
+</table>
 
 Here our private type `PrivateFoo<B>` is now part of the public signature of our `Clone` implementation. This will break compilation: the Rust compiler will throw `error[E0446]: private type PrivateFoo<B> in public interface`. I think this error is a lot worse than the `trait bound NNC: Clone is not satisfied` error we get with the current implementation of `#[derive(Clone)]`, since this error sounds scarier and doesn't seem obviously related to implementing `Clone`. If I saw this error, I'd probably think something was wrong elsewhere in my program and waste a bunch of time trying to track it down[^relative-surprise][^other-scary-consequences].
 
