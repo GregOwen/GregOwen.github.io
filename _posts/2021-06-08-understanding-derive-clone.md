@@ -77,6 +77,43 @@ Let's consider how we'd implement `#[derive(Clone)]` for a struct. We want to wr
 
 To keep things simple, let's just look at the Rust code that we're going to emit. "The derived implementation of `Clone` calls `clone` on each field" sounds pretty straightforward. We can imagine our implementation looking like this:
 
+<table class="two-column-code">
+  <tr>
+    <td>
+      <div>Struct</div>
+    </td>
+    <td>
+      <div>Implementation</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">Foo</span> <span class="p">{</span>
+  <span class="n">a</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span>
+  <span class="n">b</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">u32</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">c</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">}</span>
+
+
+
+
+</code></pre></div></div>
+    </td>
+    <td>
+    <div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">impl</span> <span class="n">Clone</span> <span class="k">for</span> <span class="n">Foo</span> <span class="p">{</span>
+  <span class="k">fn</span> <span class="nf">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+    <span class="n">Foo</span> <span class="p">{</span>
+      <span class="n">a</span><span class="p">:</span> <span class="k">self</span><span class="py">.a</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">b</span><span class="p">:</span> <span class="k">self</span><span class="py">.b</span><span class="nf">.clone</span><span class="p">(),</span>
+      <span class="n">c</span><span class="p">:</span> <span class="k">self</span><span class="py">.c</span><span class="nf">.clone</span><span class="p">(),</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+    </td>
+  </tr>
+</table>
+
 ```rust
 struct Foo {
   a: u32,
