@@ -8,9 +8,11 @@ tags:
   - rust
 ---
 
+This post assumes that you have an entry-level familiarity with Rust: you've fought with the borrow checker enough to start to internalize some of its model; you've defined structs, implemented traits on those structs, and derived implementations of common traits using macros; you've seen [trait bounds](https://doc.rust-lang.org/rust-by-example/generics/bounds.html) and maybe used one or two. Most importantly, you know what the `Clone` trait is and why you would want to use it[^clone-is-an-example].
+
 # A Rust riddle
 
-Let's start with a Rust riddle. This code compiles:
+Now that we've set expectations, let's start with a Rust riddle. This code compiles:
 
 ```rust
 use std::rc::Rc;
@@ -23,7 +25,7 @@ struct CloneByRc<NNC> where NNC: NotNecessarilyClone {
 }
 ```
 
-This on its own is not particularly surprising. We have a trait `NotNecessarilyClone`. Things that implement this trait might or might not also implement `Clone`[^clone-is-an-example]. We have a struct `CloneByRc` that stores an object that implements `NotNecessarilyClone`, but it stores it behind an [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html) so that `CloneByRc` can implement `Clone`. This is kind of the point of an `Rc`: `Rc<T>` [implements `Clone`](https://doc.rust-lang.org/std/rc/struct.Rc.html#impl-Clone) for all `T`. It takes something that isn't normally safe to clone and hides it behind a reference counter so that cloning just means incrementing the reference counter.
+This on its own is not particularly surprising. We have a trait `NotNecessarilyClone`. Things that implement this trait might or might not also implement `Clone`. We have a struct `CloneByRc` that stores an object that implements `NotNecessarilyClone`, but it stores it behind an [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html)[^what-is-rc] so that `CloneByRc` can implement `Clone`. This is kind of the point of an `Rc`: `Rc<T>` [implements `Clone`](https://doc.rust-lang.org/std/rc/struct.Rc.html#impl-Clone) for all `T`. It takes something that isn't normally safe to clone and hides it behind a reference counter so that cloning just means incrementing the reference counter.
 
 The surprising part is this: `CloneByRc<NNC>` doesn't actually implement `Clone`, even though we've used `#[derive(Clone)]`! If we try to use `CloneByRc<NNC>` somewhere that requires it to implement `Clone`, we get a compilation error:
 
@@ -53,11 +55,11 @@ help: consider further restricting this bound
    |                                                                          ^^^^^^^
 ```
 
-At first, I was very confused about why this failed to compile. Why does Rust complain that `the trait Clone is not implemented for NNC`? I only want `CloneByRc<NNC>` to implement `Clone`. The whole point of using an `Rc` was so that `NNC` wouldn't *need* to implement `Clone`.
+At first, I was confused about why this failed to compile. Why does Rust complain that `the trait Clone is not implemented for NNC`? I only want `CloneByRc<NNC>` to implement `Clone`. The whole point of using an `Rc` was so that `NNC` wouldn't *need* to implement `Clone`.
 
-After that, I was very confused about why the original code compiled at all. If `CloneByRc<NCC>` doesn't actually implement `Clone`, why didn't the original code throw an error when I tried to `#[derive(Clone)]`?
+Once I understood the compilation error, I was confused about why the original code compiled at all. If `CloneByRc<NCC>` doesn't actually implement `Clone`, why didn't the original code throw an error when I tried to `#[derive(Clone)]`?
 
-Eventually, I was no longer confused about either of those things, which is why I'm writing this blog post.
+Eventually, I figured out both the compilation error and the successful compilation of the original code, which is why I'm writing this blog post.
 
 # What `#[derive(Clone)]` promises
 
@@ -213,13 +215,13 @@ There's a lot of name mangling and weird reference stuff going on, but we can ig
 impl<B: ::core::clone::Clone, C: ::core::clone::Clone> ::core::clone::Clone for Foo<B, C>
 ```
 
-This is how `#[derive(Clone)]` guarantees that it can call `self.c.clone()`: it adds a type constraint on `C` so that `Foo<B, C>` only implements `Clone` when `C` implements `Clone`. This is another reasonable solution to the problem: whereas the `struct Foo<B, C: Clone>` implementation above says that you can only create a `Foo<B, C>` when `C` implements `Clone`, this implementation says that you can _create_ a `Foo<B, C>` with any `B` and `C` you like, but that you can only _clone_ your `Foo<B, C>` if `C` implements `Clone`.
+This is how `#[derive(Clone)]` guarantees that it can call `self.c.clone()`: it adds a type constraint on `C` so that `Foo<B, C>` only implements `Clone` when `C` implements `Clone`[^why-fully-qualified]. This is another reasonable solution to the problem: whereas the `struct Foo<B, C: Clone>` implementation above says that you can only create a `Foo<B, C>` when `C` implements `Clone`, this implementation says that you can _create_ a `Foo<B, C>` with any `B` and `C` you like, but that you can only _clone_ your `Foo<B, C>` if `C` implements `Clone`.
 
 But there's something else going on here. This implementation also adds the `B: Clone` constraint, even though we don't need that constraint for `Foo<B, C>` to implement `Clone`. Remember, the `b` field of `Foo<B, C>` is a `Rc<B>`. `b.clone()` will typecheck for any `B`.
 
-This at least explains the error I was getting in my `CloneByRc<NNC>` example in the riddle I started with: Rust complained that `the trait bound NNC: Clone is not satisfied` because the implementation of `#[derive(Clone)]` was adding an `NNC: Clone` type constraint. But why does `#[derive(Clone)]` add this unnecessary constraint?
+This at least explains the compilation error I was getting in my `CloneByRc<NNC>` example in the riddle I started with: Rust complained that `the trait bound NNC: Clone is not satisfied` because the implementation of `#[derive(Clone)]` was adding an `NNC: Clone` type constraint. But why does `#[derive(Clone)]` add this unnecessary constraint?
 
-# The limits of Rust macros
+# The limitations of Rust macros
 
 What we'd really want is an implementation that adds type constraints only when we need them. For this example, we'd like something like
 
@@ -227,13 +229,15 @@ What we'd really want is an implementation that adds type constraints only when 
 impl<B, C: Clone> Clone for Foo<B, C>
 ```
 
-The problem is that this requires the macro to inspect the fields of `Foo<B, C>`, figure out which ones are already `Clone`, and only add the type constraint for the other fields. Rust's procedural macros don't have access to the Rust compiler, so the macro would have to implement all of the necessary type checking by itself.
+Why doesn't `#[derive(Clone)]` produce this implementation instead?
 
-What's worse, this kind of inspection is actually impossible in practice. The input to the macro is just the list of tokens that define `Foo<B, C>`. It only gets syntactic information ("the name of the type of this field is `Rc<B>`") rather than semantic information (the definition of the `Rc` type), so the macro would need to do its type checking given only the names of the types being referenced. The definition of `Foo<B, C>` might include references to arbitrary other types, including types defined elsewhere in the crate, so there's no way the macro can know how to check if the type implements `Clone` given only its name.
+The problem is that this implementation requires the macro to inspect the fields of `Foo<B, C>`, figure out which ones are already `Clone`, and only add the type constraint for the other fields. The short answer is that Rust's procedural macros just aren't powerful enough to do this. They don't have access to the Rust compiler, so our optimal `#[derive(Clone)]` macro would have to implement all of the necessary type checking by itself.
+
+The long answer is that this kind of inspection is actually impossible in practice. The input to the macro is just the list of tokens that define `Foo<B, C>`. It only gets syntactic information ("the name of the type of this field is `Rc<B>`") rather than semantic information (the definition of the `Rc` type), so the macro would need to do its type checking given only the names of the types being referenced. The definition of `Foo<B, C>` might include references to arbitrary other types, including types defined elsewhere in the crate, so there's no way the macro can know how to check if the type implements `Clone` given only its name.
 
 # Do we have to inspect the fields?
 
-So we can't check if our fields are guaranteed to implement `Clone`. Can we avoid unnecessary type constraints by being a little more clever? For example, we could imagine an implementation that adds exactly the type constraints it needs:
+So we can't check if our fields are guaranteed to implement `Clone`. But there's still got to be a way to avoid unnecessary type constraints, right? What if we try being a little more clever? For example, we could imagine an implementation that adds exactly the type constraints it needs:
 
 ```rust
 impl<B, C> Clone for Foo<B, C> where Rc<B>: Clone, C: Clone
@@ -241,7 +245,7 @@ impl<B, C> Clone for Foo<B, C> where Rc<B>: Clone, C: Clone
 
 Here we've just taken the exact types of the fields that use our generic type parameters and constrained those types to implement `Clone`. This seems like exactly what we want: `Rc<B>: Clone` is true for all `B`, so `C: Clone` is the only nontrivial constraint.
 
-This works for our current example, but it has some unfortunate downsides. First of all, we've just revealed that `Foo<B, C>` uses an `Rc<B>`. Since `b` was a private field of `Foo`, it's a little weird to leak this information.
+This works for our current example, but it has some unfortunate downsides. First of all, our implementation now reveals that `Foo<B, C>` uses an `Rc<B>`. Since `b` was a private field of `Foo`, it's a little weird to leak this information.
 
 The bigger downside, though, is that we might start leaking private _types_. Let's take a look at this example:
 
@@ -290,7 +294,7 @@ The bigger downside, though, is that we might start leaking private _types_. Let
   </tr>
 </table>
 
-Here our private type `PrivateFoo<B>` is now part of the public signature of our `Clone` implementation. This will break compilation: the Rust compiler will throw `error[E0446]: private type PrivateFoo<B> in public interface`. I think this error is a lot worse than the `trait bound NNC: Clone is not satisfied` error we get with the current implementation of `#[derive(Clone)]`, since this error sounds scarier and doesn't seem obviously related to implementing `Clone`. If I saw this error, I'd probably think something was wrong elsewhere in my program and waste a bunch of time trying to track it down[^relative-surprise][^other-scary-consequences].
+Now our private type `PrivateFoo<B>` is part of the public signature of our `Clone` implementation. This will break compilation: the Rust compiler will throw `error[E0446]: private type PrivateFoo<B> in public interface`[^other-scary-consequences]. I think this error is a lot worse than the `trait bound NNC: Clone is not satisfied` error we get with the current implementation of `#[derive(Clone)]`, since this error sounds scarier and doesn't seem obviously related to implementing `Clone`. If I saw this error, I'd probably think something was wrong elsewhere in my program and waste a bunch of time trying to track it down[^relative-surprise].
 
 # The workaround
 
@@ -300,9 +304,11 @@ The answer, it turns out, is pretty straightforward: just implement `Clone` manu
 
 In fact, I suspect that part of the reason `#[derive(Clone)]` hasn't fixed this issue is that the workaround is so easy.
 
-# Conclusion: why did they do it this way?
+# Conclusion
 
-By now we've seen a few possible implementations for `#[derive(Clone)]`. The perfect ones are impossible and the possible ones are imperfect. All of them mean that you have to implement `Clone` manually for some types of structs, so choosing between them is a design decision. You might choose to optimize for the most common case or for the case where implementing manually is the most painful, but whichever one you pick you're going to leave somebody wondering why they have to implement `Clone` manually.
+The answer to the first part of my riddle ("why do I get an error message complaining that `the trait Clone is not implemented for NNC`?") is that the implementation of `Clone` produced by `#[derive(Clone)]` adds a type constraint `NNC: Clone`. The answer to the second part ("why did the declaration of `CloneByRc<NNC>` compile if `CloneByRc<NNC>` isn't actually guaranteed to be `Clone`?") also comes down to that type constraint: because of the type constraint, `#[derive(Clone)]` doesn't actually guarantee that `CloneByRc<NNC>` will be `Clone` for all `NNC`. It only guarantees that `CloneByRc<NNC>` will be `Clone` whenever `NNC` is `Clone`.
+
+Seeing that type constraint was the first step on our tour through many hypothetical implementations for `#[derive(Clone)]`. Because of the limitations on Rust's derive macros, each of these implementations has a downside: the perfect ones are impossible and the possible ones are imperfect. For any implementation that could be written in Rust today, you'll have to implement `Clone` manually for some types of structs. You might choose to optimize for the most common case or for the case where implementing manually is the most painful, but whichever one you pick you're going to leave somebody wondering why they have to implement `Clone` manually.
 
 Here are the two most plausible implementations:
 
@@ -313,16 +319,18 @@ Here are the two most plausible implementations:
 
 Given the situations in which these two implementations break down and the fact that the workaround is so straightforward, I'm not surprised that the authors of `#[derive(Clone)]` chose the "type constraints on all type parameters" approach.
 
-[^clone-is-an-example]: I'm using `Clone` as my example here, but this discussion applies to any derivable trait. If you're not familiar with `Clone`, you can basically think of it as "any object that implements Clone can be deep-copied". Here's [a good explainer](https://hashrust.com/blog/moves-copies-and-clones-in-rust/).
+[^clone-is-an-example]: I'm using `Clone` as my example in this blog post, but this discussion applies to any derivable trait. If you're not familiar with `Clone`, here's [a good explainer](https://hashrust.com/blog/moves-copies-and-clones-in-rust/).
+
+[^what-is-rc]: Short for 'Reference Counted'. An `Rc` stores a pointer to an object that lives on the heap and a count of the number of live references to that object. When you create a new reference to the object, the `Rc` increments the counter. When you drop a reference to the object, the `Rc` decrements the counter. When the counter drops to 0 (when the last reference to the object is dropped) the object itself is dropped. This means that you can keep a bunch of references to the same underlying object instead of making multiple copies of the object (which might break the object's functionality if it's something like a shared counter or an HTTP client).
 
 [^procedural-macros]: To be precise, `#[derive(Clone)]` is a [procedural macro](https://doc.rust-lang.org/reference/procedural-macros.html), which means that it takes a [stream of tokens](https://doc.rust-lang.org/proc_macro/struct.TokenStream.html) (the individual words of Rust code that make up the struct definition) and returns a stream of tokens (the words that make up the trait implementation).
-
-[^mixed-levels]: There's a bit of sleight of hand in this psuedocode: I've mixed code from different levels of abstraction. The structure of the trait implementation (`impl Clone`, `fn clone(&self)`) is all literal Rust code that will be emitted as written and checked by the compiler. But `struct_name` is not literal Rust code: it's a variable that holds the name of the struct. In the actual emitted Rust code, `struct_name` will be replaced with, say, `CloneByRc`. Similarly, the `for` loop will not show up in the literal Rust code; it will be replaced by its output. In a real procedural macro, the distinction between "code that is emitted as written" and "code that is evaluated" is made explicit using a [quasi-quote](https://en.wikipedia.org/wiki/Quasi-quotation) function such as the [`quote!` macro](https://docs.rs/quote/1.0.9/quote/index.html). I've left it mixed like this for simplicity.
 
 [^what-does-reasonable-mean]: Or at least, _I_ think it's reasonable. As we'll see, there isn't really a perfect solution here so any solution is going to end up missing some edge cases. Which edge cases you choose to leave out depends on your mental model of which edge cases are most common/most painful to work around. I doubt that anybody has done any meaningful data analysis to measure that in an objective sense, so it doesn't seem like this solution is obviously worse than the one chosen.
 
 [^cargo-expand]: If you're having trouble getting `cargo expand` to run, I have [a blog post](/rustfmt-nightly) just for you.
 
-[^relative-surprise]: While the error message would tell me that this error came from the macro implementation of `Clone`, before going down this rabbit hole I would have had no idea why an implementation of `Clone` would leak a private type.
+[^why-fully-qualified]: If you're wondering why the expanded code uses the fully-qualified trait name `::core::clone::Clone` instead of just `Clone`, it has to do with the way Rust's procedural macros work. When the compiler invokes the macro, the macro returns a block of Rust code that the compiler just inserts directly in-place at the macro's invocation site. The compiler doesn't provide any namespacing for the emitted code, so the macro emits fully-qualified names to avoid name collisions. If the macro just used `Clone` and the file happened to import some other trait named `Clone`, the type checker would expect the emitted code to implement that other `Clone` instead of `::core::clone::Clone`.
 
-[^other-scary-consequences]: This is by no means an exhaustive list of what could go wrong with this type of implementation. There's a pretty good discussion of other scary and exciting consequences on this [Github issue](https://github.com/rust-lang/rust/issues/26925), which was the source for most of this blog post.
+[^other-scary-consequences]: This is by no means the only thing that could go wrong with this type of implementation. There's a pretty good discussion of other scary and exciting consequences on this [Github issue](https://github.com/rust-lang/rust/issues/26925), which was the source for most of this blog post.
+
+[^relative-surprise]: While the error message would tell me that this error came from the macro implementation of `Clone`, before going down this rabbit hole I would have had no idea why an implementation of `Clone` would leak a private type.
