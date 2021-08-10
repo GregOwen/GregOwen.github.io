@@ -1,7 +1,9 @@
 ---
 title: "Understanding #[derive(Clone)] in Rust"
-date: 2021-06-08T19:54:00-07:00
+date: 2021-08-11T08:00:00-07:00
 classes: wide
+editors:
+  - Bianca Homberg
 categories:
   - programming
 tags:
