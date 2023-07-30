@@ -1,5 +1,7 @@
-# Ignore the Gemfile lock
+# Ignore the Gemfile lock and dependencies
 Gemfile.lock
+.bundle/
+vendor/
 
 # Don't commit the rendered html to github
 _site
